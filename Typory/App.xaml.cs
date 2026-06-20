@@ -30,8 +30,6 @@ public partial class App : Application
     private ManagerWindow? _managerWindow;
     private AboutWindow? _aboutWindow;
 
-    private bool _enabled;
-
     protected override void OnStartup(StartupEventArgs e)
     {
         // Only one Typory should own the keyboard hook at a time. If another
@@ -53,7 +51,7 @@ public partial class App : Application
         // Apply saved preferences before any UI is built, then persist changes.
         _settings = new SettingsStore();
         Localization.Instance.Language = _settings.LoadLanguage();
-        _enabled = _settings.LoadEnabled();
+        ExpansionState.Instance.Enabled = _settings.LoadEnabled();
         Localization.Instance.LanguageChanged += SavePreferences;
 
         // Restore the saved snippets (or the starter set on first run), then keep
@@ -63,13 +61,13 @@ public partial class App : Application
         _snippets.Changed += () => _store.Save(_snippets.Items);
         _snippets.Initialize(_store.Load());
 
-        // Watch typing and expand matches.
-        _hook = new KeyboardHook { Paused = !_enabled };
+        // Watch typing and expand matches; pause/resume follows the shared state.
+        _hook = new KeyboardHook { Paused = !ExpansionState.Instance.Enabled };
         _hook.Typed += OnTyped;
+        ExpansionState.Instance.Changed += OnExpansionToggled;
 
-        _tray = new TrayIcon(_enabled);
+        _tray = new TrayIcon();
         _tray.ManageRequested += ShowManager;
-        _tray.EnabledChanged += OnEnabledChanged;
         _tray.AboutRequested += ShowAbout;
         _tray.QuitRequested += Shutdown;
 
@@ -97,15 +95,14 @@ public partial class App : Application
             DispatcherPriority.Background);
     }
 
-    private void OnEnabledChanged(bool enabled)
+    private void OnExpansionToggled()
     {
-        _enabled = enabled;
-        _hook.Paused = !enabled;
+        _hook.Paused = !ExpansionState.Instance.Enabled;
         SavePreferences();
     }
 
     private void SavePreferences()
-        => _settings.Save(Localization.Instance.Language, _enabled);
+        => _settings.Save(Localization.Instance.Language, ExpansionState.Instance.Enabled);
 
     /// <summary>Shows the snippet manager, reusing it if already open.</summary>
     private void ShowManager()
@@ -117,6 +114,7 @@ public partial class App : Application
         }
 
         _managerWindow = new ManagerWindow(_snippets);
+        _managerWindow.AboutRequested += ShowAbout;
         _managerWindow.Closed += (_, _) => _managerWindow = null;
         _managerWindow.Show();
         _managerWindow.Activate();

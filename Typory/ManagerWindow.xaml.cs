@@ -2,16 +2,24 @@ using System.Windows;
 using Typory.Models;
 using Typory.Services;
 
+// Disambiguate from System.Windows.Localization (pulled in via System.Windows).
+using Localization = Typory.Services.Localization;
+
 namespace Typory;
 
 /// <summary>
-/// The snippet manager: a simple editable grid of abbreviation → expansion
-/// rules. Edits bind straight to the live <see cref="SnippetManager"/>, which
-/// persists them automatically, so this window has no Save button.
+/// The snippet manager: an editable grid of abbreviation → expansion rules plus
+/// a menu mirroring the tray settings (language, enable/disable, start with
+/// Windows, about), so the window stands on its own. Edits bind straight to the
+/// live <see cref="SnippetManager"/>, which persists them automatically, so this
+/// window has no Save button.
 /// </summary>
 public partial class ManagerWindow : Window
 {
     private readonly SnippetManager _snippets;
+
+    /// <summary>Raised when the user picks About from the menu.</summary>
+    public event Action? AboutRequested;
 
     public ManagerWindow(SnippetManager snippets)
     {
@@ -19,6 +27,12 @@ public partial class ManagerWindow : Window
 
         _snippets = snippets;
         Grid.ItemsSource = snippets.Items;
+
+        RefreshMenuChecks();
+
+        // Re-sync the menu ticks when the window regains focus, in case the same
+        // settings were changed from the tray meanwhile.
+        Activated += (_, _) => RefreshMenuChecks();
     }
 
     private void OnAdd(object sender, RoutedEventArgs e)
@@ -36,5 +50,34 @@ public partial class ManagerWindow : Window
     {
         if (Grid.SelectedItem is Snippet snippet)
             _snippets.Remove(snippet);
+    }
+
+    private void OnEnglish(object sender, RoutedEventArgs e)
+    {
+        Localization.Instance.Language = AppLanguage.English;
+        RefreshMenuChecks();
+    }
+
+    private void OnTurkish(object sender, RoutedEventArgs e)
+    {
+        Localization.Instance.Language = AppLanguage.Turkish;
+        RefreshMenuChecks();
+    }
+
+    private void OnToggleEnabled(object sender, RoutedEventArgs e)
+        => ExpansionState.Instance.Enabled = EnabledMenuItem.IsChecked;
+
+    private void OnToggleAutoStart(object sender, RoutedEventArgs e)
+        => AutoStart.SetEnabled(AutoStartMenuItem.IsChecked);
+
+    private void OnAbout(object sender, RoutedEventArgs e) => AboutRequested?.Invoke();
+
+    // Tick every menu item from the current state.
+    private void RefreshMenuChecks()
+    {
+        EnglishMenuItem.IsChecked = Localization.Instance.Language == AppLanguage.English;
+        TurkishMenuItem.IsChecked = Localization.Instance.Language == AppLanguage.Turkish;
+        EnabledMenuItem.IsChecked = ExpansionState.Instance.Enabled;
+        AutoStartMenuItem.IsChecked = AutoStart.IsEnabled();
     }
 }

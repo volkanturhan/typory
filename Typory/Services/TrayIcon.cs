@@ -31,20 +31,22 @@ public sealed class TrayIcon : IDisposable
     /// <summary>Raised when the user asks to open the snippet manager.</summary>
     public event Action? ManageRequested;
 
-    /// <summary>Raised when the user toggles expansion on or off.</summary>
-    public event Action<bool>? EnabledChanged;
-
     /// <summary>Raised when the user asks to see the About window.</summary>
     public event Action? AboutRequested;
 
     /// <summary>Raised when the user asks to quit the application.</summary>
     public event Action? QuitRequested;
 
-    public TrayIcon(bool enabled)
+    public TrayIcon()
     {
         _manageItem.Click += (_, _) => ManageRequested?.Invoke();
-        _enabledItem.Checked = enabled;
-        _enabledItem.CheckedChanged += (_, _) => EnabledChanged?.Invoke(_enabledItem.Checked);
+
+        // The enabled toggle is shared state, so the tray and the manager window
+        // stay in sync however it is changed.
+        _enabledItem.Checked = ExpansionState.Instance.Enabled;
+        _enabledItem.CheckedChanged += (_, _) => ExpansionState.Instance.Enabled = _enabledItem.Checked;
+        ExpansionState.Instance.Changed += OnExpansionChanged;
+
         _autoStartItem.Checked = AutoStart.IsEnabled();
         _autoStartItem.CheckedChanged += (_, _) => AutoStart.SetEnabled(_autoStartItem.Checked);
         _aboutItem.Click += (_, _) => AboutRequested?.Invoke();
@@ -68,6 +70,14 @@ public sealed class TrayIcon : IDisposable
             _quitItem,
         });
 
+        // Refresh the toggle states whenever the menu opens, so a change made in
+        // the manager window (autostart, enable/disable) shows here too.
+        menu.Opening += (_, _) =>
+        {
+            _autoStartItem.Checked = AutoStart.IsEnabled();
+            _enabledItem.Checked = ExpansionState.Instance.Enabled;
+        };
+
         // Managing snippets is the headline command, so make it the default
         // (bold) item and the double-click behaviour.
         _manageItem.Font = new Font(menu.Font, System.Drawing.FontStyle.Bold);
@@ -87,6 +97,8 @@ public sealed class TrayIcon : IDisposable
         Localization.Instance.LanguageChanged += ApplyLanguage;
         ApplyLanguage();
     }
+
+    private void OnExpansionChanged() => _enabledItem.Checked = ExpansionState.Instance.Enabled;
 
     // Refresh every menu label from the current language and tick the active
     // language entry.
@@ -125,6 +137,7 @@ public sealed class TrayIcon : IDisposable
     public void Dispose()
     {
         Localization.Instance.LanguageChanged -= ApplyLanguage;
+        ExpansionState.Instance.Changed -= OnExpansionChanged;
 
         // Hide before disposing so the icon disappears immediately instead of
         // lingering in the tray until the user hovers over it.

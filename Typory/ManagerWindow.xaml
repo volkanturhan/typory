@@ -1,4 +1,4 @@
-<Window x:Class="Typory.ManagerWindow"
+﻿<Window x:Class="Typory.ManagerWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -49,12 +49,30 @@
         </Style>
     </Window.Resources>
 
-    <Grid Margin="16">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <DockPanel>
+
+        <!-- Menu bar: the same settings as the tray, so the window stands alone. -->
+        <Menu DockPanel.Dock="Top" Background="#F9FAFB">
+            <MenuItem Header="{Binding [TrayLanguage], Source={x:Static services:Localization.Instance}}">
+                <MenuItem x:Name="EnglishMenuItem" Header="English"
+                          IsCheckable="True" Click="OnEnglish" />
+                <MenuItem x:Name="TurkishMenuItem" Header="Türkçe"
+                          IsCheckable="True" Click="OnTurkish" />
+            </MenuItem>
+            <MenuItem x:Name="EnabledMenuItem" IsCheckable="True" Click="OnToggleEnabled"
+                      Header="{Binding [TrayEnabled], Source={x:Static services:Localization.Instance}}" />
+            <MenuItem x:Name="AutoStartMenuItem" IsCheckable="True" Click="OnToggleAutoStart"
+                      Header="{Binding [TrayAutostart], Source={x:Static services:Localization.Instance}}" />
+            <MenuItem Click="OnAbout"
+                      Header="{Binding [TrayAbout], Source={x:Static services:Localization.Instance}}" />
+        </Menu>
+
+        <Grid Margin="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
         <!-- Header: brand mark + toolbar buttons. -->
         <Grid Grid.Row="0" Margin="0,0,0,12">
@@ -102,5 +120,6 @@
                    FontSize="12" Foreground="{StaticResource TextMuted}"
                    TextWrapping="Wrap"
                    Text="{Binding [ManagerHint], Source={x:Static services:Localization.Instance}}" />
-    </Grid>
+        </Grid>
+    </DockPanel>
 </Window>
