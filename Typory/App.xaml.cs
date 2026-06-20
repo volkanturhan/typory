@@ -72,6 +72,11 @@ public partial class App : Application
         _tray.EnabledChanged += OnEnabledChanged;
         _tray.AboutRequested += ShowAbout;
         _tray.QuitRequested += Shutdown;
+
+        // Launching with "--manage" opens the snippet manager straight away, so a
+        // shortcut can jump right to it instead of going via the tray.
+        if (e.Args.Contains("--manage"))
+            ShowManager();
     }
 
     // Called on the hook thread (our UI thread) after each typed character.
