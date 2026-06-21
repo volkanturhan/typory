@@ -10,20 +10,20 @@
          the .NET SDK, so the app stays free of third-party dependencies. -->
     <UseWindowsForms>true</UseWindowsForms>
     <!-- Icon shown for the .exe in Explorer and the taskbar. -->
-    <ApplicationIcon>Assets\Typory.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\typory.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <!-- Also embed the icon as a resource so the tray code can load it at
          runtime via a pack URI. -->
-    <Resource Include="Assets\Typory.ico" />
+    <Resource Include="Assets\typory.ico" />
   </ItemGroup>
 
   <!-- Product / assembly metadata. Kept in one place so the published exe
        carries proper details in its file properties. -->
   <PropertyGroup>
-    <Product>Typory</Product>
-    <AssemblyTitle>Typory</AssemblyTitle>
+    <Product>typory</Product>
+    <AssemblyTitle>typory</AssemblyTitle>
     <Description>A lightweight Windows text expander.</Description>
     <Authors>Volkan Turhan</Authors>
     <Version>0.1.0</Version>

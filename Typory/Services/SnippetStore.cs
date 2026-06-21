@@ -1,11 +1,11 @@
 using System.IO;
 using System.Text.Json;
-using Typory.Models;
+using typory.Models;
 
-namespace Typory.Services;
+namespace typory.Services;
 
 /// <summary>
-/// Persists the user's snippets to disk as JSON under %APPDATA%\Typory. All
+/// Persists the user's snippets to disk as JSON under %APPDATA%\typory. All
 /// operations are best-effort: a missing or corrupt file yields the built-in
 /// starter snippets, and a failed save is swallowed rather than allowed to crash
 /// the app.
@@ -22,7 +22,7 @@ public sealed class SnippetStore
     {
         var folder = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "Typory");
+            "typory");
         Directory.CreateDirectory(folder);
         _filePath = Path.Combine(folder, "snippets.json");
     }

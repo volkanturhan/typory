@@ -1,11 +1,11 @@
 using System.Windows;
-using Typory.Models;
-using Typory.Services;
+using typory.Models;
+using typory.Services;
 
 // Disambiguate from System.Windows.Localization (pulled in via System.Windows).
-using Localization = Typory.Services.Localization;
+using Localization = typory.Services.Localization;
 
-namespace Typory;
+namespace typory;
 
 /// <summary>
 /// The snippet manager: an editable grid of abbreviation → expansion rules plus

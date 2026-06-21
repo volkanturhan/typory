@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace Typory.Services;
+namespace typory.Services;
 
 /// <summary>
 /// Whether expansion is currently on, held as shared observable state so the

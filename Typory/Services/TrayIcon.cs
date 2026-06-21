@@ -1,17 +1,17 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
-namespace Typory.Services;
+namespace typory.Services;
 
 /// <summary>
-/// The system-tray presence for Typory. While the app runs it lives here rather
+/// The system-tray presence for typory. While the app runs it lives here rather
 /// than on the taskbar. The context menu opens the snippet manager, toggles
 /// expansion on/off, and exposes the usual settings; the events below let the
 /// application decide what each one does.
 ///
 /// Menu text follows the app language: the menu is built once and its labels are
 /// refreshed whenever <see cref="Localization"/> changes. Backed by the WinForms
-/// <see cref="NotifyIcon"/>, which ships with the .NET SDK so Typory needs no
+/// <see cref="NotifyIcon"/>, which ships with the .NET SDK so typory needs no
 /// third-party tray library.
 /// </summary>
 public sealed class TrayIcon : IDisposable
@@ -88,7 +88,7 @@ public sealed class TrayIcon : IDisposable
             // Fall back to a generic icon if ours fails to load — never crash the
             // whole app over a tray icon.
             Icon = _icon ?? SystemIcons.Application,
-            Text = "Typory",
+            Text = "typory",
             Visible = true,
             ContextMenuStrip = menu,
         };
@@ -117,14 +117,14 @@ public sealed class TrayIcon : IDisposable
     }
 
     /// <summary>
-    /// Loads the bundled Typory icon at the system's small-icon size so the tray
+    /// Loads the bundled typory icon at the system's small-icon size so the tray
     /// gets a crisp frame. Returns null on any failure.
     /// </summary>
     private static Icon? TryLoadAppIcon()
     {
         try
         {
-            var uri = new Uri("pack://application:,,,/Assets/Typory.ico");
+            var uri = new Uri("pack://application:,,,/Assets/typory.ico");
             using var stream = System.Windows.Application.GetResourceStream(uri).Stream;
             return new Icon(stream, SystemInformation.SmallIconSize);
         }

@@ -1,9 +1,9 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using Typory.Models;
+using typory.Models;
 
-namespace Typory.Services;
+namespace typory.Services;
 
 /// <summary>
 /// The in-memory set of snippets the app expands. Exposes an observable list for

@@ -1,17 +1,17 @@
 using System.Windows;
 using System.Windows.Threading;
-using Typory.Services;
+using typory.Services;
 
 // Enabling WinForms (for the tray icon) pulls the System.Windows.Forms version
 // of Application into scope too, so spell out that we mean the WPF one; also
 // disambiguate from System.Windows.Localization.
 using Application = System.Windows.Application;
-using Localization = Typory.Services.Localization;
+using Localization = typory.Services.Localization;
 
-namespace Typory;
+namespace typory;
 
 /// <summary>
-/// Application entry point. Wires together the long-lived pieces of Typory and
+/// Application entry point. Wires together the long-lived pieces of typory and
 /// runs it as a tray application: there is no window on startup, the app lives in
 /// the system tray, and it only exits when the user chooses "Quit".
 ///
@@ -32,10 +32,10 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
-        // Only one Typory should own the keyboard hook at a time. If another
+        // Only one typory should own the keyboard hook at a time. If another
         // instance already holds the mutex, bow out quietly.
         _singleInstanceMutex = new Mutex(initiallyOwned: true,
-            @"Local\Typory.SingleInstance", out var isFirstInstance);
+            @"Local\typory.SingleInstance", out var isFirstInstance);
         if (!isFirstInstance)
         {
             Shutdown();

@@ -2,12 +2,12 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Navigation;
-using Typory.Services;
+using typory.Services;
 
 // Disambiguate from System.Windows.Localization (pulled in via System.Windows).
-using Localization = Typory.Services.Localization;
+using Localization = typory.Services.Localization;
 
-namespace Typory;
+namespace typory;
 
 /// <summary>
 /// A small "About" dialog: icon, name, version, author, project and website

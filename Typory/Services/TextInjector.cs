@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace Typory.Services;
+namespace typory.Services;
 
 /// <summary>
 /// Replaces a just-typed abbreviation with its expansion by synthesising

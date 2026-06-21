@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Typory.Services;
+namespace typory.Services;
 
 public enum AppLanguage
 {
@@ -32,12 +32,12 @@ public sealed class Localization : INotifyPropertyChanged
         ["TrayLanguage"] = "Language",
         ["TrayAbout"] = "About",
         ["TrayQuit"] = "Quit",
-        ["ManagerTitle"] = "Typory — Snippets",
+        ["ManagerTitle"] = "typory — Snippets",
         ["ColAbbreviation"] = "Abbreviation",
         ["ColExpansion"] = "Expansion",
         ["Add"] = "Add",
         ["Remove"] = "Remove",
-        ["ManagerHint"] = "Type an abbreviation anywhere and Typory replaces it with its expansion. Changes save automatically.",
+        ["ManagerHint"] = "Type an abbreviation anywhere and typory replaces it with its expansion. Changes save automatically.",
         ["AboutDescription"] = "A lightweight text expander.",
         ["AboutVersion"] = "Version",
         ["AboutClose"] = "Close",
@@ -51,12 +51,12 @@ public sealed class Localization : INotifyPropertyChanged
         ["TrayLanguage"] = "Dil",
         ["TrayAbout"] = "Hakkında",
         ["TrayQuit"] = "Çıkış",
-        ["ManagerTitle"] = "Typory — Snippet'ler",
+        ["ManagerTitle"] = "typory — Snippet'ler",
         ["ColAbbreviation"] = "Kısaltma",
         ["ColExpansion"] = "Karşılığı",
         ["Add"] = "Ekle",
         ["Remove"] = "Sil",
-        ["ManagerHint"] = "Herhangi bir yerde kısaltmayı yaz, Typory onu karşılığıyla değiştirsin. Değişiklikler otomatik kaydedilir.",
+        ["ManagerHint"] = "Herhangi bir yerde kısaltmayı yaz, typory onu karşılığıyla değiştirsin. Değişiklikler otomatik kaydedilir.",
         ["AboutDescription"] = "Hafif bir metin genişletici.",
         ["AboutVersion"] = "Sürüm",
         ["AboutClose"] = "Kapat",

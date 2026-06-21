@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Typory.Models;
+namespace typory.Models;
 
 /// <summary>
 /// A single expansion rule: when the user types <see cref="Abbreviation"/>, it is

@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Typory.Services;
+namespace typory.Services;
 
 /// <summary>
 /// A system-wide low-level keyboard hook that watches what the user types and

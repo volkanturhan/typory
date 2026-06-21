@@ -1,11 +1,11 @@
 using System.IO;
 using System.Text.Json;
 
-namespace Typory.Services;
+namespace typory.Services;
 
 /// <summary>
 /// Persists small user preferences — the chosen language and whether expansion
-/// is currently enabled — as JSON under %APPDATA%\Typory. Best-effort, like
+/// is currently enabled — as JSON under %APPDATA%\typory. Best-effort, like
 /// <see cref="SnippetStore"/>: failures fall back to defaults rather than
 /// throwing.
 /// </summary>
@@ -21,7 +21,7 @@ public sealed class SettingsStore
     {
         var folder = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "Typory");
+            "typory");
         Directory.CreateDirectory(folder);
         _filePath = Path.Combine(folder, "settings.json");
     }
