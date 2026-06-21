@@ -1,13 +1,13 @@
-# Builds both shareable Typory packages and gathers them under dist/release:
+# Builds both shareable typory packages and gathers them under dist/release:
 #
-#   Typory.exe       self-contained (~68 MB) — runs without installing .NET
-#   Typory-lite.exe  framework-dependent (~0.4 MB) — needs the .NET 8 Desktop
+#   typory.exe       self-contained (~68 MB) — runs without installing .NET
+#   typory-lite.exe  framework-dependent (~0.4 MB) — needs the .NET 8 Desktop
 #                      Runtime (Windows prompts to install it on first run if it
 #                      is missing)
 $ErrorActionPreference = 'Stop'
 
 $root = Split-Path $PSScriptRoot -Parent
-$project = Join-Path $root 'Typory\Typory.csproj'
+$project = Join-Path $root 'typory\typory.csproj'
 $selfContainedDir = Join-Path $root 'dist\win-x64'
 $liteDir = Join-Path $root 'dist\win-x64-fxdep'
 $releaseDir = Join-Path $root 'dist\release'
@@ -26,8 +26,8 @@ dotnet publish $project -c Release -r win-x64 --self-contained false `
 
 # Collect both under dist/release with clear, distinct names for the upload.
 New-Item -ItemType Directory -Force -Path $releaseDir | Out-Null
-Copy-Item (Join-Path $selfContainedDir 'Typory.exe') (Join-Path $releaseDir 'Typory.exe') -Force
-Copy-Item (Join-Path $liteDir 'Typory.exe') (Join-Path $releaseDir 'Typory-lite.exe') -Force
+Copy-Item (Join-Path $selfContainedDir 'typory.exe') (Join-Path $releaseDir 'typory.exe') -Force
+Copy-Item (Join-Path $liteDir 'typory.exe') (Join-Path $releaseDir 'typory-lite.exe') -Force
 
 Write-Output ''
 Write-Output 'Release assets (dist/release):'

@@ -5,7 +5,7 @@ namespace typory.Services;
 /// <summary>
 /// Whether expansion is currently on, held as shared observable state so the
 /// tray menu and the manager window can both toggle it and stay in sync — the
-/// same pattern Pixory uses for its colour format. The app listens to
+/// same pattern pixory uses for its colour format. The app listens to
 /// <see cref="Changed"/> to pause/resume the keyboard hook and persist the
 /// preference.
 /// </summary>

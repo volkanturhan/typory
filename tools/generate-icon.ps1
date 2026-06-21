@@ -1,4 +1,4 @@
-# Generates Typory's application icon: an emerald->cyan rounded square with three
+# Generates typory's application icon: an emerald->cyan rounded square with three
 # white bars that grow longer top to bottom — a short abbreviation "expanding"
 # into full text, which is what a text expander does.
 #
@@ -6,7 +6,7 @@
 # because System.Drawing.Icon / the WinForms NotifyIcon load BMP frames
 # reliably, whereas PNG-compressed frames can fail to decode.
 #
-# Run from anywhere; it writes ../Typory/Assets/Typory.ico.
+# Run from anywhere; it writes ../typory/Assets/typory.ico.
 Add-Type -AssemblyName System.Drawing
 
 function New-RoundedRect([single]$x, [single]$y, [single]$w, [single]$h, [single]$r) {
@@ -108,7 +108,7 @@ foreach ($single in $singles) {
 }
 $w.Flush()
 
-$target = Join-Path $PSScriptRoot '..\Typory\Assets\Typory.ico'
+$target = Join-Path $PSScriptRoot '..\typory\Assets\typory.ico'
 [System.IO.File]::WriteAllBytes($target, $out.ToArray())
 $w.Dispose()
 Write-Output "Wrote $((Resolve-Path $target).Path) ($((Get-Item $target).Length) bytes)"
