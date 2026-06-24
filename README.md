@@ -24,13 +24,26 @@ again.
 - **Pause anytime** — toggle expansion on/off from the tray.
 - **Survives restarts** — your snippets are saved and restored.
 - **Start with Windows** — optional, toggled from the tray menu.
+- **Self-updating** — when a new version ships, typory offers it from the tray; one click installs it.
 - **English & Turkish** — switch the interface language from the tray.
+- **Dark mode** — System / Dark / Light theme from the tray (follows Windows by default).
 - **Private by design** — everything stays on your machine; nothing is uploaded.
 
-## Run it
+## Download
 
-typory isn't published as a prebuilt download yet, so for now you run it from
-source. You'll need the [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+Grab the latest build from the [**Releases**](https://github.com/volkanturhan/typory/releases/latest) page:
+
+- **typory-setup-…exe** — installer (recommended). No admin rights needed, and typory keeps itself up to date from here on.
+- **typory-…exe** — portable single file; just run it, nothing to install.
+
+Both are self-contained, so you don't need .NET installed. Windows 10/11, 64-bit.
+
+typory starts quietly in the system tray — **no window pops up**. That's normal;
+double-click the tray icon (or use **Manage snippets**) to set up your snippets.
+
+## Run from source
+
+Prefer to build it yourself? You'll need the [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 (the SDK, not just the runtime) on Windows.
 
 ```bash
@@ -38,9 +51,6 @@ git clone https://github.com/volkanturhan/typory.git
 cd typory
 dotnet run --project typory/typory.csproj
 ```
-
-typory starts quietly in the system tray — **no window pops up**. That's normal;
-double-click the tray icon (or use **Manage snippets**) to set up your snippets.
 
 ## How to use
 
@@ -55,21 +65,22 @@ Tip: start abbreviations with a character you'd never type by accident (like `;`
 or `:`) so they only fire when you mean them.
 
 Right-click the tray icon for **Manage snippets**, **Expansion enabled** (pause /
-resume), **Start with Windows**, language, and **Quit**.
+resume), **Start with Windows**, language, **Theme** (System / Dark / Light),
+**Check for updates**, and **Quit**.
 
 ## Where your data lives
 
 Your snippets are stored locally at `%APPDATA%\typory\snippets.json` and never
 leave your machine; preferences live next to them in `settings.json`.
 
-## Build a shareable exe
+## Build it yourself
 
-Want a standalone `.exe` you can hand to someone without the SDK? Build it
-yourself — the output isn't checked into the repo:
+Want to produce the release artifacts locally? They aren't checked into the repo:
 
 ```bash
-# Builds into dist/ (self-contained typory.exe + lite build)
-pwsh tools/publish.ps1
+# Portable self-contained exe + the Windows installer, into dist/release.
+# (The installer step needs Inno Setup: winget install JRSoftware.InnoSetup)
+pwsh tools/release.ps1
 ```
 
 ## Tech

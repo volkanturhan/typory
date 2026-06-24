@@ -23,13 +23,27 @@ metinleri bir kez tanımla, bir daha tam halini yazma.
 - **İstediğin an duraklat** — genişletmeyi tepsiden aç/kapa.
 - **Yeniden başlatmaya dayanır** — snippet'lerin kaydedilip geri yüklenir.
 - **Windows ile başla** — isteğe bağlı, tepsi menüsünden aç/kapa.
+- **Kendini günceller** — yeni sürüm çıkınca typory tepsiden teklif eder; tek tıkla kurulur.
 - **İngilizce & Türkçe** — arayüz dilini tepsiden değiştir.
+- **Karanlık mod** — tepsiden Sistem / Koyu / Açık tema (varsayılan Windows'u takip eder).
 - **Tasarımı gereği gizli** — her şey senin makinende kalır, hiçbir şey yüklenmez.
 
-## Çalıştır
+## İndir
 
-typory henüz hazır bir indirme olarak yayınlanmadı, bu yüzden şimdilik kaynaktan
-çalıştırıyorsun. Windows'ta [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+En güncel sürümü [**Releases**](https://github.com/volkanturhan/typory/releases/latest) sayfasından indir:
+
+- **typory-setup-…exe** — kurulum (önerilen). Yönetici izni gerekmez ve typory bundan sonra kendini güncel tutar.
+- **typory-…exe** — taşınabilir tek dosya; çalıştır yeter, kurulum yok.
+
+İkisi de self-contained, yani .NET kurulu olması gerekmez. Windows 10/11, 64-bit.
+
+typory sessizce sistem tepsisinde başlar — **hiçbir pencere açılmaz**. Bu
+normaldir; snippet'lerini ayarlamak için tepsi ikonuna çift tıkla (ya da
+**Snippet'leri yönet**'i kullan).
+
+## Kaynaktan çalıştır
+
+Kendin derlemeyi mi tercih edersin? Windows'ta [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 (sadece runtime değil, SDK) kurulu olmalı.
 
 ```bash
@@ -37,10 +51,6 @@ git clone https://github.com/volkanturhan/typory.git
 cd typory
 dotnet run --project typory/typory.csproj
 ```
-
-typory sessizce sistem tepsisinde başlar — **hiçbir pencere açılmaz**. Bu
-normaldir; snippet'lerini ayarlamak için tepsi ikonuna çift tıkla (ya da
-**Snippet'leri yönet**'i kullan).
 
 ## Nasıl kullanılır
 
@@ -55,21 +65,22 @@ normaldir; snippet'lerini ayarlamak için tepsi ikonuna çift tıkla (ya da
 gibi) ki yalnızca isteyince tetiklensinler.
 
 Tepsi ikonuna sağ tık: **Snippet'leri yönet**, **Genişletme açık** (duraklat /
-sürdür), **Windows ile başlat**, dil ve **Çıkış**.
+sürdür), **Windows ile başlat**, dil, **Tema** (Sistem / Koyu / Açık),
+**Güncellemeleri denetle** ve **Çıkış**.
 
 ## Verilerin nerede tutulur
 
 Snippet'lerin yerel olarak `%APPDATA%\typory\snippets.json` içinde saklanır ve
 makinenden asla çıkmaz; tercihlerin yanındaki `settings.json` dosyasında tutulur.
 
-## Paylaşılabilir exe oluştur
+## Kendin derle
 
-SDK olmadan birine verebileceğin bağımsız bir `.exe` mi istiyorsun? Kendin
-derle — çıktı repoya dahil edilmez:
+Yayın dosyalarını yerelde üretmek ister misin? Çıktı repoya dahil edilmez:
 
 ```bash
-# dist/ içine derler (self-contained typory.exe + lite sürüm)
-pwsh tools/publish.ps1
+# Taşınabilir self-contained exe + Windows kurulumu, dist/release içine.
+# (Kurulum adımı Inno Setup ister: winget install JRSoftware.InnoSetup)
+pwsh tools/release.ps1
 ```
 
 ## Teknoloji
