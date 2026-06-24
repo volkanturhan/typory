@@ -1,0 +1,17 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Brand accent (kept the same across themes), plus its hover shade. -->
+    <SolidColorBrush x:Key="Accent" Color="#10B981" />
+    <SolidColorBrush x:Key="AccentHover" Color="#059669" />
+
+    <!-- Light surfaces and text. -->
+    <SolidColorBrush x:Key="Surface" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="Subtle" Color="#F9FAFB" />
+    <SolidColorBrush x:Key="Border" Color="#E5E7EB" />
+    <SolidColorBrush x:Key="GridLine" Color="#EEF0F2" />
+    <SolidColorBrush x:Key="TextPrimary" Color="#111827" />
+    <SolidColorBrush x:Key="TextMuted" Color="#6B7280" />
+    <SolidColorBrush x:Key="Disabled" Color="#D1D5DB" />
+
+</ResourceDictionary>
