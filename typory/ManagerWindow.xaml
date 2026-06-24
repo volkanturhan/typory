@@ -11,18 +11,15 @@
         MinWidth="420" MinHeight="300"
         WindowStartupLocation="CenterScreen"
         FontFamily="Segoe UI"
-        Background="White">
+        Background="{DynamicResource Surface}">
 
     <Window.Resources>
-        <SolidColorBrush x:Key="Accent" Color="#10B981" />
-        <SolidColorBrush x:Key="AccentDark" Color="#059669" />
-        <SolidColorBrush x:Key="TextPrimary" Color="#111827" />
-        <SolidColorBrush x:Key="TextMuted" Color="#6B7280" />
-
-        <!-- Flat rounded buttons. -->
+        <!-- Flat rounded buttons. The accent background is supplied per-button so
+             the secondary (Remove) button can override it; hover/disabled shades
+             follow the active theme. -->
         <Style x:Key="ToolButton" TargetType="Button">
             <Setter Property="Foreground" Value="White" />
-            <Setter Property="Background" Value="{StaticResource Accent}" />
+            <Setter Property="Background" Value="{DynamicResource Accent}" />
             <Setter Property="FontSize" Value="13" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="MinWidth" Value="84" />
@@ -37,10 +34,10 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource AccentDark}" />
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentHover}" />
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Bd" Property="Background" Value="#D1D5DB" />
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource Disabled}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -52,7 +49,8 @@
     <DockPanel>
 
         <!-- Menu bar: the same settings as the tray, so the window stands alone. -->
-        <Menu DockPanel.Dock="Top" Background="#F9FAFB">
+        <Menu DockPanel.Dock="Top" Background="{DynamicResource Subtle}"
+              Foreground="{DynamicResource TextPrimary}">
             <MenuItem Header="{Binding [TrayLanguage], Source={x:Static services:Localization.Instance}}">
                 <MenuItem x:Name="EnglishMenuItem" Header="English"
                           IsCheckable="True" Click="OnEnglish" />
@@ -63,6 +61,14 @@
                       Header="{Binding [TrayEnabled], Source={x:Static services:Localization.Instance}}" />
             <MenuItem x:Name="AutoStartMenuItem" IsCheckable="True" Click="OnToggleAutoStart"
                       Header="{Binding [TrayAutostart], Source={x:Static services:Localization.Instance}}" />
+            <MenuItem Header="{Binding [TrayTheme], Source={x:Static services:Localization.Instance}}">
+                <MenuItem x:Name="SystemThemeMenuItem" IsCheckable="True" Click="OnSystemTheme"
+                          Header="{Binding [ThemeSystem], Source={x:Static services:Localization.Instance}}" />
+                <MenuItem x:Name="DarkThemeMenuItem" IsCheckable="True" Click="OnDarkTheme"
+                          Header="{Binding [ThemeDark], Source={x:Static services:Localization.Instance}}" />
+                <MenuItem x:Name="LightThemeMenuItem" IsCheckable="True" Click="OnLightTheme"
+                          Header="{Binding [ThemeLight], Source={x:Static services:Localization.Instance}}" />
+            </MenuItem>
             <MenuItem Click="OnAbout"
                       Header="{Binding [TrayAbout], Source={x:Static services:Localization.Instance}}" />
         </Menu>
@@ -78,9 +84,9 @@
         <Grid Grid.Row="0" Margin="0,0,0,12">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <Border Width="16" Height="16" CornerRadius="4"
-                        Background="{StaticResource Accent}" />
+                        Background="{DynamicResource Accent}" />
                 <TextBlock Text="typory" Margin="9,0,0,0" FontWeight="SemiBold"
-                           FontSize="15" Foreground="{StaticResource TextPrimary}"
+                           FontSize="15" Foreground="{DynamicResource TextPrimary}"
                            VerticalAlignment="Center" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
@@ -88,7 +94,7 @@
                         Click="OnAdd"
                         Content="{Binding [Add], Source={x:Static services:Localization.Instance}}" />
                 <Button x:Name="RemoveButton" Style="{StaticResource ToolButton}"
-                        Margin="8,0,0,0" Background="#9CA3AF" Click="OnRemove"
+                        Margin="8,0,0,0" Background="{DynamicResource TextMuted}" Click="OnRemove"
                         Content="{Binding [Remove], Source={x:Static services:Localization.Instance}}" />
             </StackPanel>
         </Grid>
@@ -98,13 +104,29 @@
                   AutoGenerateColumns="False"
                   HeadersVisibility="Column"
                   GridLinesVisibility="Horizontal"
-                  HorizontalGridLinesBrush="#EEF0F2"
-                  BorderBrush="#E5E7EB" BorderThickness="1"
-                  Background="White" RowBackground="White"
+                  HorizontalGridLinesBrush="{DynamicResource GridLine}"
+                  BorderBrush="{DynamicResource Border}" BorderThickness="1"
+                  Background="{DynamicResource Surface}" RowBackground="{DynamicResource Surface}"
+                  Foreground="{DynamicResource TextPrimary}"
                   CanUserAddRows="False" CanUserDeleteRows="False"
                   CanUserReorderColumns="False"
                   SelectionMode="Single" SelectionUnit="FullRow"
                   RowHeight="30" FontSize="13">
+            <DataGrid.Resources>
+                <!-- Theme the column headers and cells so text stays legible in
+                     dark mode (the WPF defaults assume a light surface). -->
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Background" Value="{DynamicResource Subtle}" />
+                    <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+                    <Setter Property="Padding" Value="8,4" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource Border}" />
+                    <Setter Property="BorderThickness" Value="0,0,0,1" />
+                </Style>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                </Style>
+            </DataGrid.Resources>
             <DataGrid.Columns>
                 <DataGridTextColumn Width="160"
                                     Header="{Binding [ColAbbreviation], Source={x:Static services:Localization.Instance}}"
@@ -117,7 +139,7 @@
 
         <!-- Hint. -->
         <TextBlock Grid.Row="2" Margin="2,12,2,0"
-                   FontSize="12" Foreground="{StaticResource TextMuted}"
+                   FontSize="12" Foreground="{DynamicResource TextMuted}"
                    TextWrapping="Wrap"
                    Text="{Binding [ManagerHint], Source={x:Static services:Localization.Instance}}" />
         </Grid>

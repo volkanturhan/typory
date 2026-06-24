@@ -70,6 +70,24 @@ public partial class ManagerWindow : Window
     private void OnToggleAutoStart(object sender, RoutedEventArgs e)
         => AutoStart.SetEnabled(AutoStartMenuItem.IsChecked);
 
+    private void OnSystemTheme(object sender, RoutedEventArgs e)
+    {
+        ThemeService.Apply(AppTheme.System);
+        RefreshMenuChecks();
+    }
+
+    private void OnDarkTheme(object sender, RoutedEventArgs e)
+    {
+        ThemeService.Apply(AppTheme.Dark);
+        RefreshMenuChecks();
+    }
+
+    private void OnLightTheme(object sender, RoutedEventArgs e)
+    {
+        ThemeService.Apply(AppTheme.Light);
+        RefreshMenuChecks();
+    }
+
     private void OnAbout(object sender, RoutedEventArgs e) => AboutRequested?.Invoke();
 
     // Tick every menu item from the current state.
@@ -79,5 +97,8 @@ public partial class ManagerWindow : Window
         TurkishMenuItem.IsChecked = Localization.Instance.Language == AppLanguage.Turkish;
         EnabledMenuItem.IsChecked = ExpansionState.Instance.Enabled;
         AutoStartMenuItem.IsChecked = AutoStart.IsEnabled();
+        SystemThemeMenuItem.IsChecked = ThemeService.Theme == AppTheme.System;
+        DarkThemeMenuItem.IsChecked = ThemeService.Theme == AppTheme.Dark;
+        LightThemeMenuItem.IsChecked = ThemeService.Theme == AppTheme.Light;
     }
 }
