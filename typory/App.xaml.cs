@@ -2,10 +2,11 @@ using System.Windows;
 using System.Windows.Threading;
 using typory.Services;
 
-// Enabling WinForms (for the tray icon) pulls the System.Windows.Forms version
-// of Application into scope too, so spell out that we mean the WPF one; also
+// Enabling WinForms (for the tray icon) pulls the System.Windows.Forms versions
+// of these types into scope too, so spell out that we mean the WPF ones; also
 // disambiguate from System.Windows.Localization.
 using Application = System.Windows.Application;
+using MessageBox = System.Windows.MessageBox;
 using Localization = typory.Services.Localization;
 
 namespace typory;
@@ -29,6 +30,12 @@ public partial class App : Application
     private TrayIcon _tray = null!;
     private ManagerWindow? _managerWindow;
     private AboutWindow? _aboutWindow;
+
+    private UpdateService _updates = null!;
+    // Periodically re-checks for updates so a long-running instance still notices.
+    private DispatcherTimer? _updateTimer;
+    // The newer release found by the background check, awaiting the user's nod.
+    private UpdateService.AvailableUpdate? _pendingUpdate;
 
     protected override void OnStartup(StartupEventArgs e)
     {
@@ -54,6 +61,10 @@ public partial class App : Application
         ExpansionState.Instance.Enabled = _settings.LoadEnabled();
         Localization.Instance.LanguageChanged += SavePreferences;
 
+        // Apply the saved colour theme before any window is built, then persist.
+        ThemeService.Apply(_settings.LoadTheme());
+        ThemeService.Changed += () => _settings.SaveTheme(ThemeService.Theme);
+
         // Restore the saved snippets (or the starter set on first run), then keep
         // persisting them as they are edited.
         _store = new SnippetStore();
@@ -69,12 +80,59 @@ public partial class App : Application
         _tray = new TrayIcon();
         _tray.ManageRequested += ShowManager;
         _tray.AboutRequested += ShowAbout;
+        _tray.UpdateRequested += InstallPendingUpdate;
+        _tray.CheckUpdateRequested += () => _ = CheckForUpdateAsync(announceWhenCurrent: true);
         _tray.QuitRequested += Shutdown;
+
+        // Quietly ask GitHub whether a newer typory exists; if so the tray will
+        // offer it. Fire-and-forget so a slow network never delays startup.
+        _updates = new UpdateService();
+        _ = CheckForUpdateAsync(announceWhenCurrent: false);
+
+        // Re-check every few hours so an instance left running for days still
+        // notices a new release without needing a restart.
+        _updateTimer = new DispatcherTimer { Interval = TimeSpan.FromHours(6) };
+        _updateTimer.Tick += (_, _) => _ = CheckForUpdateAsync(announceWhenCurrent: false);
+        _updateTimer.Start();
 
         // Launching with "--manage" opens the snippet manager straight away, so a
         // shortcut can jump right to it instead of going via the tray.
         if (e.Args.Contains("--manage"))
             ShowManager();
+    }
+
+    /// <summary>
+    /// Background check for a newer release. The await resumes on the UI thread,
+    /// so touching the tray here is safe. Silent on failure by design.
+    /// </summary>
+    private async Task CheckForUpdateAsync(bool announceWhenCurrent)
+    {
+        _pendingUpdate = await _updates.CheckForUpdateAsync();
+        if (_pendingUpdate is not null)
+            _tray.ShowUpdateAvailable(_pendingUpdate.Version.ToString(3));
+        else if (announceWhenCurrent)
+            _tray.ShowUpToDate();   // give feedback only for a manual check
+    }
+
+    /// <summary>
+    /// Downloads and launches the installer for the pending update, then quits so
+    /// it can replace typory's files. Tells the user if the download fails.
+    /// </summary>
+    private async void InstallPendingUpdate()
+    {
+        if (_pendingUpdate is null)
+            return;
+
+        try
+        {
+            await _updates.DownloadAndLaunchInstallerAsync(_pendingUpdate);
+            Shutdown();
+        }
+        catch
+        {
+            MessageBox.Show(Localization.Instance["UpdateFailed"], "typory",
+                MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
     }
 
     // Called on the hook thread (our UI thread) after each typed character.
