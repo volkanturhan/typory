@@ -48,31 +48,6 @@
 
     <DockPanel>
 
-        <!-- Menu bar: the same settings as the tray, so the window stands alone. -->
-        <Menu DockPanel.Dock="Top" Background="{DynamicResource Subtle}"
-              Foreground="{DynamicResource TextPrimary}">
-            <MenuItem Header="{Binding [TrayLanguage], Source={x:Static services:Localization.Instance}}">
-                <MenuItem x:Name="EnglishMenuItem" Header="English"
-                          IsCheckable="True" Click="OnEnglish" />
-                <MenuItem x:Name="TurkishMenuItem" Header="Türkçe"
-                          IsCheckable="True" Click="OnTurkish" />
-            </MenuItem>
-            <MenuItem x:Name="EnabledMenuItem" IsCheckable="True" Click="OnToggleEnabled"
-                      Header="{Binding [TrayEnabled], Source={x:Static services:Localization.Instance}}" />
-            <MenuItem x:Name="AutoStartMenuItem" IsCheckable="True" Click="OnToggleAutoStart"
-                      Header="{Binding [TrayAutostart], Source={x:Static services:Localization.Instance}}" />
-            <MenuItem Header="{Binding [TrayTheme], Source={x:Static services:Localization.Instance}}">
-                <MenuItem x:Name="SystemThemeMenuItem" IsCheckable="True" Click="OnSystemTheme"
-                          Header="{Binding [ThemeSystem], Source={x:Static services:Localization.Instance}}" />
-                <MenuItem x:Name="DarkThemeMenuItem" IsCheckable="True" Click="OnDarkTheme"
-                          Header="{Binding [ThemeDark], Source={x:Static services:Localization.Instance}}" />
-                <MenuItem x:Name="LightThemeMenuItem" IsCheckable="True" Click="OnLightTheme"
-                          Header="{Binding [ThemeLight], Source={x:Static services:Localization.Instance}}" />
-            </MenuItem>
-            <MenuItem Click="OnAbout"
-                      Header="{Binding [TrayAbout], Source={x:Static services:Localization.Instance}}" />
-        </Menu>
-
         <Grid Margin="16">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />

@@ -172,7 +172,6 @@ public partial class App : Application
         }
 
         _managerWindow = new ManagerWindow(_snippets);
-        _managerWindow.AboutRequested += ShowAbout;
         _managerWindow.Closed += (_, _) => _managerWindow = null;
         _managerWindow.Show();
         _managerWindow.Activate();
