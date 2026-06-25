@@ -10,7 +10,8 @@ Birini yazdığın an — örneğin `;mail` — onu silip yerine tam metni yazar
 metinleri bir kez tanımla, bir daha tam halini yazma.
 
 <p align="center">
-  <img src="docs/screenshot.png" alt="typory snippet yöneticisi" width="420" />
+  <img src="docs/screenshot-dark.png" alt="typory snippet yöneticisi (dark)" width="400" />
+  <img src="docs/screenshot-light.png" alt="typory snippet yöneticisi (light)" width="400" />
 </p>
 
 ## Özellikler

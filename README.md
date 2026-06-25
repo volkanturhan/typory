@@ -11,7 +11,8 @@ Set up the snippets you type over and over once, then never type them in full
 again.
 
 <p align="center">
-  <img src="docs/screenshot.png" alt="typory's snippet manager" width="420" />
+  <img src="docs/screenshot-dark.png" alt="typory's snippet manager (dark)" width="400" />
+  <img src="docs/screenshot-light.png" alt="typory's snippet manager (light)" width="400" />
 </p>
 
 ## Features
