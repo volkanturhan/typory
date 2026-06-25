@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Input;
 using typory.Models;
 using typory.Services;
 
@@ -41,4 +42,14 @@ public partial class ManagerWindow : Window
         if (Grid.SelectedItem is Snippet snippet)
             _snippets.Remove(snippet);
     }
+
+    // The window is borderless (no native title bar), so dragging the custom
+    // title bar moves it, and the custom close button closes it.
+    private void OnHeaderDrag(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ChangedButton == MouseButton.Left)
+            DragMove();
+    }
+
+    private void OnCloseClick(object sender, RoutedEventArgs e) => Close();
 }

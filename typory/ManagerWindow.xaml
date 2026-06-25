@@ -8,12 +8,43 @@
         mc:Ignorable="d"
         Title="{Binding [ManagerTitle], Source={x:Static services:Localization.Instance}}"
         Width="540" Height="440"
-        MinWidth="420" MinHeight="300"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        AllowsTransparency="True"
+        Background="Transparent"
         WindowStartupLocation="CenterScreen"
-        FontFamily="Segoe UI"
-        Background="{DynamicResource Surface}">
+        FontFamily="Segoe UI">
 
     <Window.Resources>
+        <!-- Small borderless "close" button shown in the custom title bar. -->
+        <Style x:Key="CloseButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="24" />
+            <Setter Property="Height" Value="24" />
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Margin" Value="8,0,0,0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" CornerRadius="5" Background="{TemplateBinding Background}">
+                            <TextBlock Text="✕" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                       Foreground="{TemplateBinding Foreground}"
+                                       FontSize="{TemplateBinding FontSize}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource Subtle}" />
+                                <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- Flat rounded buttons. The accent background is supplied per-button so
              the secondary (Remove) button can override it; hover/disabled shades
              follow the active theme. -->
@@ -46,7 +77,13 @@
         </Style>
     </Window.Resources>
 
-    <DockPanel>
+    <!-- Outer margin leaves room for the drop shadow; the card is the Border. -->
+    <Border Margin="12" CornerRadius="12"
+            Background="{DynamicResource Surface}"
+            BorderBrush="{DynamicResource Border}" BorderThickness="1">
+        <Border.Effect>
+            <DropShadowEffect Color="#000000" Opacity="0.22" BlurRadius="20" ShadowDepth="0" />
+        </Border.Effect>
 
         <Grid Margin="16">
             <Grid.RowDefinitions>
@@ -55,8 +92,10 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-        <!-- Header: brand mark + toolbar buttons. -->
-        <Grid Grid.Row="0" Margin="0,0,0,12">
+        <!-- Header doubles as the custom title bar: brand mark, toolbar buttons,
+             and a close button. The whole row is draggable. -->
+        <Grid Grid.Row="0" Margin="0,0,0,12" Background="Transparent"
+              MouseLeftButtonDown="OnHeaderDrag">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <Border Width="16" Height="16" CornerRadius="4"
                         Background="{DynamicResource Accent}" />
@@ -64,13 +103,14 @@
                            FontSize="15" Foreground="{DynamicResource TextPrimary}"
                            VerticalAlignment="Center" />
             </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                 <Button x:Name="AddButton" Style="{StaticResource ToolButton}"
                         Click="OnAdd"
                         Content="{Binding [Add], Source={x:Static services:Localization.Instance}}" />
                 <Button x:Name="RemoveButton" Style="{StaticResource ToolButton}"
                         Margin="8,0,0,0" Background="{DynamicResource TextMuted}" Click="OnRemove"
                         Content="{Binding [Remove], Source={x:Static services:Localization.Instance}}" />
+                <Button Style="{StaticResource CloseButtonStyle}" Click="OnCloseClick" />
             </StackPanel>
         </Grid>
 
@@ -118,5 +158,5 @@
                    TextWrapping="Wrap"
                    Text="{Binding [ManagerHint], Source={x:Static services:Localization.Instance}}" />
         </Grid>
-    </DockPanel>
+    </Border>
 </Window>
