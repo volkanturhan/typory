@@ -137,9 +137,36 @@
                     <Setter Property="BorderBrush" Value="{DynamicResource Border}" />
                     <Setter Property="BorderThickness" Value="0,0,0,1" />
                 </Style>
+
+                <!-- The edit box shown when a cell is double-clicked. Without this
+                     it uses the WPF default (white fill, black border) which looks
+                     wrong in dark mode and shows a black border in light mode. -->
+                <Style TargetType="TextBox">
+                    <Setter Property="Background" Value="{DynamicResource Surface}" />
+                    <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+                    <Setter Property="CaretBrush" Value="{DynamicResource TextPrimary}" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Padding" Value="8,0" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                </Style>
+
                 <Style TargetType="DataGridCell">
                     <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+                    <Setter Property="Background" Value="Transparent" />
                     <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <!-- Drop the dotted/black cell focus rectangle. -->
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                </Style>
+
+                <!-- Selected row uses a soft theme fill instead of the system blue. -->
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Background" Value="{DynamicResource Surface}" />
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource Subtle}" />
+                        </Trigger>
+                    </Style.Triggers>
                 </Style>
             </DataGrid.Resources>
             <DataGrid.Columns>
